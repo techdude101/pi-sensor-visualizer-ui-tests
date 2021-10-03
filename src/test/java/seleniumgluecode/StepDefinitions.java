@@ -46,6 +46,36 @@ public class StepDefinitions {
 
 	@When("the user enters a date range")
 	public void user_enters_date() throws Throwable {   
+		driver.findElement(By.cssSelector(".flatpickr-input")).click();
+		List<WebElement> days = driver.findElements(By.cssSelector(".flatpickr-day"));
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, 1);
+		SimpleDateFormat date_format = new SimpleDateFormat("d");
+		final String date_string_1 = date_format.format(calendar.getTime());
+		
+		calendar.add(Calendar.DATE, -1);
+		final String date_string_2 = date_format.format(calendar.getTime());
+		
+		
+		for (WebElement element : days) {
+			String text = element.getText();
+			if (text.equals(date_string_2) ) {
+				element.click();
+				break; // Prevent StaleElementException
+			}
+		}
+		
+		days = driver.findElements(By.cssSelector(".flatpickr-day"));
+		
+		for (WebElement element : days) {
+			String text = element.getText();
+			if (text.equals(date_string_1) ) {
+				element.click();
+				break;
+			}
+		}
+		
 		return;
 	}
 
